@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="toolbar" type="id"></item>
+    <item name="toolbar_title" type="id"></item>
+    <item name="swipeRefreshLayout" type="id"></item>
+    <item name="recycleView" type="id"></item>
+    <item name="action_settings" type="id">false</item>
+    <item name="action_about" type="id">false</item>
+    <item name="tab_image" type="id">false</item>
+    <item name="tab_text" type="id">false</item>
+    <item name="pullToRefreshRecycleView" type="id">false</item>
+</resources>
