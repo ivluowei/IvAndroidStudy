@@ -19,9 +19,6 @@ import cn.lw.study.core.BaseViewHolder;
 public class FirstActivity extends BaseListActivity {
     private ArrayList<String> data;
 
-
-
-
     @Override
     protected void setUpContentView() {
         setContentView(R.layout.activity_first, R.string.title, MODE_BACK);
