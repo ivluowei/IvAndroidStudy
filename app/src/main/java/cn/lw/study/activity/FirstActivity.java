@@ -74,6 +74,5 @@ public class FirstActivity extends BaseListActivity {
         public void onItemClick(View v, int position) {
             Toast.makeText(FirstActivity.this,"sss"+position, Toast.LENGTH_SHORT).show();
         }
-
     }
 }
