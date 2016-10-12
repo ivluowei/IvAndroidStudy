@@ -55,7 +55,6 @@ public class SimpleActivity extends BaseActivity implements TabLayout.onTabClick
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
