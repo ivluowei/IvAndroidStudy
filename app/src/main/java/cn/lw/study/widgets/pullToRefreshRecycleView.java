@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import cn.lw.study.R;
+import cn.lw.study.core.BaseListActivity;
 
 /**
  * Created by luow on 2016/9/29.
@@ -16,6 +17,14 @@ import cn.lw.study.R;
 public class pullToRefreshRecycleView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    public static final int ACTION_PULL_TO_REFRESH = 1;//上拉刷新
+    public static final int ACTION_PULL_LOAD_MORE_REFRESH = 2;//下拉加载
+    public static final int ACTION_IDLE = 0;//空闲
+    private int mCurentState = ACTION_IDLE;
+    private boolean isLoadMoreEnable = false;
+
+    private ILayoutManager layoutManager;
+    private BaseListActivity.BaseListAdapter adapter;
 
     public pullToRefreshRecycleView(Context context) {
         super(context);
@@ -38,10 +47,38 @@ public class pullToRefreshRecycleView extends FrameLayout implements SwipeRefres
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
         swipeRefreshLayout.setOnRefreshListener(this);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mCurentState == ACTION_IDLE && isLoadMoreEnable && checkIfLoadMore() && dy > 0) {
+                    mCurentState = ACTION_PULL_LOAD_MORE_REFRESH;
+                    swipeRefreshLayout.setEnabled(false);
+                    adapter.showLoadMoreView(true);
+                    listener.onRefresh(mCurentState);
+                }
+            }
+        });
     }
 
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        recyclerView.setLayoutManager(layoutManager);
+    private boolean checkIfLoadMore() {
+        int position = layoutManager.findLastItemPosition();//屏幕可见的最后一个item的position
+        int totalCount = layoutManager.getLayoutManager().getItemCount();
+        return totalCount - position < 5;
+    }
+
+    public void setLoadMoreEnable(boolean loadMoreEnable) {
+        isLoadMoreEnable = loadMoreEnable;
+    }
+
+    public void setLayoutManager(ILayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+        recyclerView.setLayoutManager(layoutManager.getLayoutManager());
     }
 
     public void setItemDecoreton(RecyclerView.ItemDecoration decoration) {
@@ -50,7 +87,8 @@ public class pullToRefreshRecycleView extends FrameLayout implements SwipeRefres
         }
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter) {
+    public void setAdapter(BaseListActivity.BaseListAdapter adapter) {
+        this.adapter=adapter;
         recyclerView.setAdapter(adapter);
     }
 
@@ -59,19 +97,29 @@ public class pullToRefreshRecycleView extends FrameLayout implements SwipeRefres
             @Override
             public void run() {
                 swipeRefreshLayout.setRefreshing(true);
-                listener.onRefresh(0);
+                onRefresh();
             }
         });
     }
 
-    public void setStopRefreshView() {
-        swipeRefreshLayout.setRefreshing(false);
+    public void setRefreshCompleted() {
+        switch (mCurentState) {
+            case ACTION_PULL_TO_REFRESH:
+                swipeRefreshLayout.setRefreshing(false);
+                break;
+            case ACTION_PULL_LOAD_MORE_REFRESH:
+                swipeRefreshLayout.setEnabled(true);
+                adapter.showLoadMoreView(false);
+                break;
+        }
+        mCurentState = ACTION_IDLE;
     }
 
 
     @Override
     public void onRefresh() {
-        listener.onRefresh(0);
+        mCurentState = ACTION_PULL_TO_REFRESH;
+        listener.onRefresh(mCurentState);
     }
 
     public OnRefreshRecycleView listener;

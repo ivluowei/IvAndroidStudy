@@ -66,11 +66,25 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         setUpToolbar(tab.textResId, tab.menuResId, tab.modeResId);
 
         if (tab.modeResId == MODE_NONE) {
-                toolbar.setNavigationIcon(null);
+            toolbar.setNavigationIcon(null);
         }
         try {
-            fragment = tab.targetFragmentClz.newInstance();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment.getFragment()).commitAllowingStateLoss();
+            ITabFragment tmpFragment = (ITabFragment) getSupportFragmentManager().findFragmentByTag(tab.targetFragmentClz.getSimpleName());
+            if (tmpFragment == null) {
+                //tmpFragment当前的fragment，    fragment上一个fragment
+                tmpFragment = tab.targetFragmentClz.newInstance();
+                if (fragment == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.frameLayout, tmpFragment.getFragment(), tab.targetFragmentClz.getSimpleName()).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction().hide(fragment.getFragment())
+                            .add(R.id.frameLayout, tmpFragment.getFragment(), tab.targetFragmentClz.getSimpleName()).commit();
+                }
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(fragment.getFragment())
+                        .show(tmpFragment.getFragment()).commit();
+            }
+            fragment = tmpFragment;
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

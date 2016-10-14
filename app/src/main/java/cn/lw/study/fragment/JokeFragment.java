@@ -64,9 +64,9 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        Log.d("isVisibleToUser","222"+isVisibleToUser);
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e("isVisibleToUser","222"+hidden);
     }
 
     private void initListener() {

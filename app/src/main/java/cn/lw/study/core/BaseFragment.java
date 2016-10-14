@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d("onAttach",toString()+"--------->onAttach");
     }
 
     /**
@@ -31,6 +33,13 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("onCreate",toString()+"--------->onCreate");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.d("setUserVisibleHint",toString()+"--------->"+isVisibleToUser);
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     /**
@@ -39,6 +48,8 @@ public abstract class BaseFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("onCreateView",toString()+"--------->onCreateView");
+
         return inflater.inflate(getLayooutId(),container,false);
     }
 
@@ -48,6 +59,8 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d("onActivityCreated",toString()+"--------->onActivityCreated");
+
         setUpView();
     }
 

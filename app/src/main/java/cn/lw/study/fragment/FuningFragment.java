@@ -73,9 +73,9 @@ public class FuningFragment extends BaseFragment implements ITabFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        Log.d("isVisibleToUser","333"+isVisibleToUser);
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e("isVisibleToUser","333"+hidden);
     }
 
     @Override
