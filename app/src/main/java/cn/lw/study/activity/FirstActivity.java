@@ -1,5 +1,6 @@
 package cn.lw.study.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import cn.lw.study.MainActivity;
 import cn.lw.study.R;
+import cn.lw.study.constants.ConstantsValue;
 import cn.lw.study.core.BaseListActivity;
 import cn.lw.study.core.BaseViewHolder;
 import cn.lw.study.widgets.ILayoutManager;
@@ -31,6 +34,9 @@ public class FirstActivity extends BaseListActivity {
     @Override
     protected void setUpView() {
         super.setUpView();
+        Intent it=new Intent(this, MainActivity.class);
+        it.putExtra("appStatus", ConstantsValue.STATUS_LOGOUT);
+        startActivity(it);
     }
 
     @Override

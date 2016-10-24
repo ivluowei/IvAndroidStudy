@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cn.lw.study.R;
 import cn.lw.study.activity.FirstActivity;
@@ -23,17 +24,21 @@ import cn.lw.study.activity.SecondActivity;
 import cn.lw.study.adapter.FragmentAdapter;
 import cn.lw.study.core.BaseFragment;
 import cn.lw.study.core.ITabFragment;
+import cn.lw.study.http.DataCallBack;
+import cn.lw.study.http.OkhttpUtils;
 import cn.lw.study.utils.ScreenUtils;
+import okhttp3.Response;
 
 /**
  * Created by lw on 2016/6/21.
  */
-public class JokeFragment extends BaseFragment  implements ITabFragment {
+public class JokeFragment extends BaseFragment implements ITabFragment {
     private ImageView mSlideLine;
     private ViewPager mViewPager;
     private FragmentAdapter adapter;
     private View view;
     private TextView rbLabel;
+    private TextView tvv;
     private int labelWidth;
     private ArrayList<String> data;
     private RadioGroup radioGroup;
@@ -50,12 +55,12 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
         labelWidth = ScreenUtils.getScreenWidth(getActivity()) / 4;
         radioGroup = (RadioGroup) getView().findViewById(R.id.radioGroup);
         horizontalScrollView = (HorizontalScrollView) getView().findViewById(R.id.horizontalScrollView);
+        tvv= (TextView) getView().findViewById(R.id.tvv);
         data = new ArrayList<String>();
         data.add("首页首页");
         data.add("新闻首页");
         data.add("周刊首页");
         data.add("周刊首页");
-        data.add("爱我");
         mSlideLine = (ImageView) getView().findViewById(R.id.iv_slide_line);
         mViewPager = (ViewPager) getView().findViewById(R.id.viewPager);
         initTab(data);
@@ -66,7 +71,7 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.e("isVisibleToUser","222"+hidden);
+        Log.e("isVisibleToUser", "222" + hidden);
     }
 
     private void initListener() {
@@ -126,7 +131,7 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
             }
         }
 
-        mSlideLine.getLayoutParams().width=labelWidth;
+        mSlideLine.getLayoutParams().width = labelWidth;
         // 计算偏移量
 //        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.key_word_slide_line);
 //        float imgWidth = bitmap.getWidth();
@@ -138,20 +143,27 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
         } else if (ScreenUtils.getScreenWidth(getActivity()) == 1080) {
             dx = 48f;
         }
-      // float offset = labelWidth / 2;
+        // float offset = labelWidth / 2;
         // 设置偏移位置
-      //  Matrix matrix = new Matrix();
-       // matrix.postTranslate(offset, 0);
-      //  mSlideLine.setImageMatrix(matrix);
+        //  Matrix matrix = new Matrix();
+        // matrix.postTranslate(offset, 0);
+        //  mSlideLine.setImageMatrix(matrix);
     }
 
     private void initPageView() {
         ArrayList<Fragment> arrayList = new ArrayList<Fragment>();
-        for (int i = 0; i < data.size(); i++) {
-            ViewPagerFragment fragment = new ViewPagerFragment();
-            arrayList.add(fragment);
-        }
+        ViewPagerFragment fragment = new ViewPagerFragment();
+        SettingFragment fragment1 = new SettingFragment();
+        ViewPagerFragment fragment3 = new ViewPagerFragment();
+        SettingFragment fragment4 = new SettingFragment();
+
+        arrayList.add(fragment);
+        arrayList.add(fragment1);
+        arrayList.add(fragment3);
+        arrayList.add(fragment4);
+
         adapter = new FragmentAdapter(getFragmentManager(), arrayList);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(adapter);
     }
 
@@ -162,6 +174,32 @@ public class JokeFragment extends BaseFragment  implements ITabFragment {
                 startActivity(new Intent(getActivity(), FirstActivity.class));
                 break;
             case R.id.action_notification:
+//                OkhttpUtils.get("https://api.eakay.cn/order-api/api/MiteSite/findCarBySiteCode.hm", new DataCallBack<Users>() {
+//                    @Override
+//                    protected void onSuccessResponse(Response response, Users result) {
+//                        Log.d("resultresult",result.getMsg().getCode()+"");
+//                        tvv.setText(result.getMsg().getCode()+"");
+//                    }
+//
+//                    @Override
+//                    protected void onErrorResponse(Response response,Exception e) {
+//                        Log.d("resultresult",e+"");
+//                    }
+//                },"JokeFragment");
+                HashMap<String ,String> params=new HashMap<String ,String>();
+                params.put("key","2121122");
+                params.put("value","9255");
+                OkhttpUtils.post("https://api.eakay.cn/order-api/api/MiteSite/findCarBySiteCode.htm", params, new DataCallBack<String>() {
+                    @Override
+                    protected void onSuccessResponse(Response response, String result) {
+                        Log.d("resultresult",result);
+                    }
+
+                    @Override
+                    protected void onErrorResponse(Response response, Exception e) {
+
+                    }
+                },"JokeFragment");
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(getActivity(), SecondActivity.class));

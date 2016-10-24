@@ -11,7 +11,6 @@ import cn.lw.study.core.ITabFragment;
 import cn.lw.study.fragment.FuningFragment;
 import cn.lw.study.fragment.JokeFragment;
 import cn.lw.study.fragment.MessageFragment;
-import cn.lw.study.fragment.SettingFragment;
 import cn.lw.study.widgets.tab.TabLayout;
 
 /**
@@ -38,7 +37,7 @@ public class SimpleActivity extends BaseActivity implements TabLayout.onTabClick
         tabs.add(new TabLayout.Tab(R.drawable.joke_selector, R.string.joke, R.menu.main, JokeFragment.class));
         tabs.add(new TabLayout.Tab(R.drawable.funng_selector, R.string.funing,R.menu.draw_item, FuningFragment.class));
         tabs.add(new TabLayout.Tab(R.drawable.message_selector, R.string.message,R.menu.draw_item,MessageFragment.class));
-        tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, SettingFragment.class));
+      //  tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, SettingFragment.class));
         tabLayout.setUpData(tabs, this);
         tabLayout.setCurrentTab(0);
     }

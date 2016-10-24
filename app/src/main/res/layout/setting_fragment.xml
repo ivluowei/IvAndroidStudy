@@ -17,13 +17,16 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="settingFragment"
             android:textSize="18sp" />
     </LinearLayout>
 
-    <cn.lw.study.widgets.tab.TabLayout
-        android:id="@+id/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"></cn.lw.study.widgets.tab.TabLayout>
+    <ProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="false" />
 
 </LinearLayout>

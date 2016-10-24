@@ -17,14 +17,16 @@ import cn.lw.study.core.ITabFragment;
 import cn.lw.study.fragment.FuningFragment;
 import cn.lw.study.fragment.JokeFragment;
 import cn.lw.study.fragment.MessageFragment;
-import cn.lw.study.fragment.SettingFragment;
 import cn.lw.study.widgets.tab.TabLayout;
-
+/**
+ * Created by luow on 2016/6/17.
+ */
 public class MainActivity extends BaseActivity implements TabLayout.onTabClickListener {
     private TabLayout tabLayout;
     private ArrayList<TabLayout.Tab> tabs;
     private ITabFragment fragment;
     private DrawerLayout drawer;
+   // private ViewPager mViewPager;
 
     @Override
     protected void setUpContentView() {
@@ -35,6 +37,7 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
     protected void setUpView() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
+      //  mViewPager= (ViewPager) findViewById(R.id.viewPager);
     }
 
     @Override
@@ -43,10 +46,33 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         tabs.add(new TabLayout.Tab(R.drawable.joke_selector, R.string.joke, R.menu.draw_item, MODE_DRAWER, JokeFragment.class));
         tabs.add(new TabLayout.Tab(R.drawable.funng_selector, R.string.funing, R.menu.main, MODE_BACK, FuningFragment.class));
         tabs.add(new TabLayout.Tab(R.drawable.message_selector, R.string.message, R.menu.draw_item, MODE_NONE, MessageFragment.class));
-        tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, MODE_DRAWER, SettingFragment.class));
-        tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, MODE_DRAWER, SettingFragment.class));
+    //    tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, MODE_DRAWER, SettingFragment.class));
+     //   tabs.add(new TabLayout.Tab(R.drawable.setting_selector, R.string.setting, R.menu.main, MODE_DRAWER, SettingFragment.class));
         tabLayout.setUpData(tabs, this);
         tabLayout.setCurrentTab(0);
+
+//        mViewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                setUpToolbar(tabs.get(position).textResId, tabs.get(position).menuResId, tabs.get(position).modeResId);
+//
+//                if (tabs.get(position).modeResId == MODE_NONE) {
+//                    toolbar.setNavigationIcon(null);
+//                }
+//                tabLayout.setCurrentTab(position);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
     }
 
     @Override
@@ -68,6 +94,7 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         if (tab.modeResId == MODE_NONE) {
             toolbar.setNavigationIcon(null);
         }
+
         try {
             ITabFragment tmpFragment = (ITabFragment) getSupportFragmentManager().findFragmentByTag(tab.targetFragmentClz.getSimpleName());
             if (tmpFragment == null) {
@@ -90,6 +117,7 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -98,6 +126,9 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         super.onNewIntent(intent);
         switch (intent.getIntExtra("appStatus", 0)) {
             case ConstantsValue.STATUS_RESTART_APP:
+                protectApp();
+                break;
+            case ConstantsValue.STATUS_LOGOUT:
                 protectApp();
                 break;
         }
@@ -126,5 +157,29 @@ public class MainActivity extends BaseActivity implements TabLayout.onTabClickLi
         }
         return false;
     }
+
+//    class PageAdapter extends FragmentPagerAdapter{
+//
+//        public PageAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            try {
+//                return tabs.get(position).targetFragmentClz.newInstance().getFragment();
+//            } catch (InstantiationException e) {
+//                e.printStackTrace();
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return tabs.size();
+//        }
+//    }
 
 }
